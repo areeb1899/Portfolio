@@ -28,6 +28,7 @@ router.post('/register', async (req, res) => {
 
     if (preUser) {
       preUser.messages.push({ message }); // Add the message to the messages array
+
       await preUser.save();
 
       const mailOptions = {
@@ -47,6 +48,7 @@ router.post('/register', async (req, res) => {
         }
       });
 
+      return res.status(201).json({ status: 201, message: "Your response has been submitted successfully" });
     } else {
       const newUser = new Users({
         fname,
