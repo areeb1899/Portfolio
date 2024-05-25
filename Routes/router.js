@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models/userSchema');
 const nodemailer = require('nodemailer');
+const ViewerCount = require('../models/viewerCount');
 
 
 
@@ -48,7 +49,7 @@ router.post('/register', async (req, res) => {
         }
       });
 
-      return res.status(201).json({ status: 201, message: "Your response has been submitted successfully" });
+      return res.status(201).json({ status: 201, message: "Your response has been submitted again successfully" });
     } else {
       const newUser = new Users({
         fname,
@@ -78,6 +79,24 @@ router.post('/register', async (req, res) => {
   } catch (error) {
     console.log("Caught an error:", error);
     return res.status(400).json({ status: 400, error: "All input fields are required" });
+  }
+});
+
+
+router.get('/', async (req, res) => {
+  try {
+      let viewerCount = await ViewerCount.findOne();
+
+      if (!viewerCount) {
+          viewerCount = new ViewerCount({ count: 0 });
+      }
+
+      viewerCount.count += 1;
+      await viewerCount.save();
+
+      res.json({ viewers: viewerCount.count });
+  } catch (err) {
+      res.status(500).send('Error updating viewer count');
   }
 });
 
