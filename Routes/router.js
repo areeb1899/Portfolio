@@ -100,4 +100,14 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.get('/api/get-count', async (req, res) => {
+  try {
+    const viewerCount = await ViewerCount.findOne();
+    res.json({ viewers: viewerCount ? viewerCount.count : 0 });
+  } catch (err) {
+    res.status(500).send('Error retrieving viewer count');
+  }
+});
+
 module.exports = router;
