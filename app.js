@@ -10,7 +10,13 @@ require("./db/database");
 
 
 
-app.use(cors());
+// Allow requests from Netlify frontend
+const corsOptions = {
+    origin: "https://areebahmed-portfolio.netlify.app/", // Replace with your actual Netlify domain
+    credentials: true,
+};
+
+app.use(cors(corsOptions)); // Use the specific CORS configuration
 app.use(express.json());
 app.use(router)
 
